@@ -202,13 +202,13 @@ export function useSound() {
       // Melodia principal — notas suaves com reverb simulado
       const melody: [number, number, number][] = [
         // [frequência, início, duração]
-        [392, 0, 0.45],     // G4
-        [523, 0.35, 0.45],  // C5
-        [659, 0.7, 0.4],    // E5
-        [784, 1.0, 0.5],    // G5
-        [659, 1.4, 0.3],    // E5
-        [784, 1.65, 0.6],   // G5
-        [1047, 1.95, 0.9],  // C6 — nota final longa
+        [392, 0, 0.45], // G4
+        [523, 0.35, 0.45], // C5
+        [659, 0.7, 0.4], // E5
+        [784, 1.0, 0.5], // G5
+        [659, 1.4, 0.3], // E5
+        [784, 1.65, 0.6], // G5
+        [1047, 1.95, 0.9], // C6 — nota final longa
       ];
 
       melody.forEach(([freq, start, dur]) => {

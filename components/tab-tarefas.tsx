@@ -170,55 +170,59 @@ export function TabTarefas() {
       {/* Task list */}
       <div className="min-h-0 flex-1 overflow-y-auto">
         <div className="flex flex-col">
-        {tarefas.map((t) => {
-          const cor = prioridadeCores[t.prioridade];
-          return (
-            <div
-              key={t.id}
-              className="flex items-center gap-3 border-b border-[#d4b8e8] px-2 py-2 hover:bg-[#e8d0f0]"
-            >
-              <button
-                onClick={() => toggleTarefa(t.id)}
-                className="flex size-5 shrink-0 items-center justify-center border-2 border-[#7b2d8e] bg-[#fff0fc] text-xs"
-                style={{
-                  boxShadow:
-                    "inset 1px 1px 0 #7b2d8e, inset -1px -1px 0 #e8d0f0",
-                }}
-                aria-label={
-                  t.concluida ? "Marcar como pendente" : "Marcar como concluida"
-                }
+          {tarefas.map((t) => {
+            const cor = prioridadeCores[t.prioridade];
+            return (
+              <div
+                key={t.id}
+                className="flex items-center gap-3 border-b border-[#d4b8e8] px-2 py-2 hover:bg-[#e8d0f0]"
               >
-                {t.concluida && (
-                  <span className="text-[#7b2d8e]">&#10003;</span>
-                )}
-              </button>
-              <span
-                className={`flex-1 text-base ${
-                  t.concluida ? "text-[#b898cc] line-through" : "text-[#1a0a2e]"
-                }`}
-              >
-                {t.texto}
-              </span>
-              <span
-                className="border px-2 py-0.5 text-xs"
-                style={{
-                  backgroundColor: cor.bg,
-                  color: cor.text,
-                  borderColor: cor.border,
-                }}
-              >
-                {t.prioridade}
-              </span>
-              <button
-                onClick={() => removeTarefa(t.id)}
-                className="flex size-5 shrink-0 items-center justify-center border border-[#b898cc] bg-[#e8d0f0] text-xs text-danger hover:bg-danger-light"
-                aria-label="Remover tarefa"
-              >
-                X
-              </button>
-            </div>
-          );
-        })}
+                <button
+                  onClick={() => toggleTarefa(t.id)}
+                  className="flex size-5 shrink-0 items-center justify-center border-2 border-[#7b2d8e] bg-[#fff0fc] text-xs"
+                  style={{
+                    boxShadow:
+                      "inset 1px 1px 0 #7b2d8e, inset -1px -1px 0 #e8d0f0",
+                  }}
+                  aria-label={
+                    t.concluida
+                      ? "Marcar como pendente"
+                      : "Marcar como concluida"
+                  }
+                >
+                  {t.concluida && (
+                    <span className="text-[#7b2d8e]">&#10003;</span>
+                  )}
+                </button>
+                <span
+                  className={`flex-1 text-base ${
+                    t.concluida
+                      ? "text-[#b898cc] line-through"
+                      : "text-[#1a0a2e]"
+                  }`}
+                >
+                  {t.texto}
+                </span>
+                <span
+                  className="border px-2 py-0.5 text-xs"
+                  style={{
+                    backgroundColor: cor.bg,
+                    color: cor.text,
+                    borderColor: cor.border,
+                  }}
+                >
+                  {t.prioridade}
+                </span>
+                <button
+                  onClick={() => removeTarefa(t.id)}
+                  className="flex size-5 shrink-0 items-center justify-center border border-[#b898cc] bg-[#e8d0f0] text-xs text-danger hover:bg-danger-light"
+                  aria-label="Remover tarefa"
+                >
+                  X
+                </button>
+              </div>
+            );
+          })}
         </div>
       </div>
 
