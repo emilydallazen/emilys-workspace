@@ -36,21 +36,52 @@ export function useSound() {
     }
   }, [getCtx]);
 
-  /** Troca de aba — "tic" mais suave e agudo */
+  /** Troca de aba — som suave de página sendo folheada */
   const playTab = useCallback(() => {
     try {
       const ctx = getCtx();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(1200, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(900, ctx.currentTime + 0.04);
-      gain.gain.setValueAtTime(0.1, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.05);
+      const t = ctx.currentTime;
+      const duration = 0.28;
+
+      // Ruído suave — simula o deslizar do papel
+      const bufferSize = Math.ceil(ctx.sampleRate * duration);
+      const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = noiseBuffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+      }
+      const noise = ctx.createBufferSource();
+      noise.buffer = noiseBuffer;
+
+      // Filtro passa-baixa — remove aspereza, mantém só o "ssshh" suave
+      const lp = ctx.createBiquadFilter();
+      lp.type = "lowpass";
+      lp.frequency.setValueAtTime(3000, t);
+      lp.frequency.exponentialRampToValueAtTime(1500, t + 0.12);
+      lp.frequency.exponentialRampToValueAtTime(800, t + duration);
+      lp.Q.setValueAtTime(0.3, t);
+
+      // Filtro passa-alta — tira graves para não soar como tapa
+      const hp = ctx.createBiquadFilter();
+      hp.type = "highpass";
+      hp.frequency.setValueAtTime(1200, t);
+      hp.frequency.exponentialRampToValueAtTime(600, t + duration);
+
+      // Envelope — ataque gradual, fade longo e suave
+      const env = ctx.createGain();
+      env.gain.setValueAtTime(0.001, t);
+      env.gain.linearRampToValueAtTime(0.08, t + 0.04); // sobe devagar
+      env.gain.setValueAtTime(0.07, t + 0.08); // platô suave
+      env.gain.exponentialRampToValueAtTime(0.03, t + 0.16);
+      env.gain.exponentialRampToValueAtTime(0.001, t + duration);
+
+      noise.connect(lp);
+      lp.connect(hp);
+      hp.connect(env);
+      env.connect(ctx.destination);
+
+      noise.start(t);
+      noise.stop(t + duration + 0.01);
     } catch {
       // silently fail
     }
@@ -77,54 +108,114 @@ export function useSound() {
     }
   }, [getCtx]);
 
-  /** Fechar janela / modal — "chirp" descendente */
+  /** Fechar janela — som satisfatório descendente com "whoosh" */
   const playClose = useCallback(() => {
     try {
       const ctx = getCtx();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = "square";
-      osc.frequency.setValueAtTime(700, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.08);
-      osc.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.12);
-      gain.gain.setValueAtTime(0.12, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.14);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.14);
+      const t = ctx.currentTime;
+
+      // Tom descendente — nota principal suave
+      const osc1 = ctx.createOscillator();
+      const g1 = ctx.createGain();
+      osc1.type = "triangle";
+      osc1.frequency.setValueAtTime(600, t);
+      osc1.frequency.exponentialRampToValueAtTime(250, t + 0.15);
+      osc1.frequency.exponentialRampToValueAtTime(120, t + 0.25);
+      g1.gain.setValueAtTime(0.001, t);
+      g1.gain.linearRampToValueAtTime(0.1, t + 0.01);
+      g1.gain.exponentialRampToValueAtTime(0.04, t + 0.12);
+      g1.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
+      osc1.connect(g1);
+      g1.connect(ctx.destination);
+      osc1.start(t);
+      osc1.stop(t + 0.26);
+
+      // Harmônico — oitava acima, mais sutil
+      const osc2 = ctx.createOscillator();
+      const g2 = ctx.createGain();
+      osc2.type = "sine";
+      osc2.frequency.setValueAtTime(1200, t);
+      osc2.frequency.exponentialRampToValueAtTime(400, t + 0.18);
+      g2.gain.setValueAtTime(0.001, t);
+      g2.gain.linearRampToValueAtTime(0.04, t + 0.01);
+      g2.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+      osc2.connect(g2);
+      g2.connect(ctx.destination);
+      osc2.start(t);
+      osc2.stop(t + 0.19);
+
+      // "Whoosh" de ar — ruído filtrado curto
+      const bufSize = Math.ceil(ctx.sampleRate * 0.15);
+      const buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+      const d = buf.getChannelData(0);
+      for (let i = 0; i < bufSize; i++) {
+        d[i] = Math.random() * 2 - 1;
+      }
+      const noiseSrc = ctx.createBufferSource();
+      noiseSrc.buffer = buf;
+      const bp = ctx.createBiquadFilter();
+      bp.type = "bandpass";
+      bp.frequency.setValueAtTime(2500, t);
+      bp.frequency.exponentialRampToValueAtTime(600, t + 0.12);
+      bp.Q.setValueAtTime(0.7, t);
+      const ng = ctx.createGain();
+      ng.gain.setValueAtTime(0.001, t);
+      ng.gain.linearRampToValueAtTime(0.06, t + 0.015);
+      ng.gain.exponentialRampToValueAtTime(0.001, t + 0.14);
+      noiseSrc.connect(bp);
+      bp.connect(ng);
+      ng.connect(ctx.destination);
+      noiseSrc.start(t);
+      noiseSrc.stop(t + 0.15);
     } catch {
       // silently fail
     }
   }, [getCtx]);
 
-  /** Confirmar / sucesso — dois bips rápidos ascendentes */
+  /** Confirmar / adicionar — clique de mouse realista (press + release) */
   const playConfirm = useCallback(() => {
     try {
       const ctx = getCtx();
-      // Bip 1
-      const osc1 = ctx.createOscillator();
-      const gain1 = ctx.createGain();
-      osc1.type = "square";
-      osc1.frequency.setValueAtTime(600, ctx.currentTime);
-      gain1.gain.setValueAtTime(0.1, ctx.currentTime);
-      gain1.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.06);
-      osc1.connect(gain1);
-      gain1.connect(ctx.destination);
-      osc1.start(ctx.currentTime);
-      osc1.stop(ctx.currentTime + 0.06);
-      // Bip 2
-      const osc2 = ctx.createOscillator();
-      const gain2 = ctx.createGain();
-      osc2.type = "square";
-      osc2.frequency.setValueAtTime(900, ctx.currentTime + 0.08);
-      gain2.gain.setValueAtTime(0.001, ctx.currentTime);
-      gain2.gain.setValueAtTime(0.1, ctx.currentTime + 0.08);
-      gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.14);
-      osc2.connect(gain2);
-      gain2.connect(ctx.destination);
-      osc2.start(ctx.currentTime + 0.08);
-      osc2.stop(ctx.currentTime + 0.14);
+      const t = ctx.currentTime;
+
+      const makeClick = (when: number, volume: number, duration: number) => {
+        const len = Math.ceil(ctx.sampleRate * duration);
+        const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+        const data = buf.getChannelData(0);
+        for (let i = 0; i < len; i++) {
+          const env = Math.exp(-i / (ctx.sampleRate * 0.001));
+          data[i] = (Math.random() * 2 - 1) * env;
+        }
+        const src = ctx.createBufferSource();
+        src.buffer = buf;
+
+        const hp = ctx.createBiquadFilter();
+        hp.type = "highpass";
+        hp.frequency.setValueAtTime(1800, when);
+
+        const peak = ctx.createBiquadFilter();
+        peak.type = "peaking";
+        peak.frequency.setValueAtTime(3500, when);
+        peak.gain.setValueAtTime(8, when);
+        peak.Q.setValueAtTime(2, when);
+
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(volume, when);
+        g.gain.exponentialRampToValueAtTime(0.001, when + duration);
+
+        src.connect(hp);
+        hp.connect(peak);
+        peak.connect(g);
+        g.connect(ctx.destination);
+        src.start(when);
+        src.stop(when + duration);
+      };
+
+      // PRESS — botão descendo, impacto no micro-switch (mais forte)
+      makeClick(t, 1.0, 0.012);
+
+      // RELEASE — botão voltando com a mola (~60ms depois, mais suave)
+      makeClick(t + 0.06, 0.6, 0.008);
     } catch {
       // silently fail
     }
