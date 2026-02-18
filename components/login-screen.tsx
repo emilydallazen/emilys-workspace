@@ -48,7 +48,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
         i++;
       } else {
         clearInterval(interval);
-        setTimeout(() => setPhase("login"), 600);
+        setTimeout(() => setPhase("login"), 3600);
       }
     }, 120);
 
@@ -106,7 +106,8 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
       <div
         className="w-105 border-2 border-[#4a1a6b] shadow-[4px_4px_0px_#0a0020]"
         style={{
-          animation: phase === "logging-in" ? undefined : "fadeInLogin 0.4s ease-out",
+          animation:
+            phase === "logging-in" ? undefined : "fadeInLogin 0.4s ease-out",
         }}
       >
         {/* Title bar */}
@@ -132,8 +133,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
             <div
               className="flex size-20 items-center justify-center border-2 border-[#7b2d8e] bg-[#e8d0f0]"
               style={{
-                boxShadow:
-                  "inset 2px 2px 0 #fff0fc, inset -2px -2px 0 #b898cc",
+                boxShadow: "inset 2px 2px 0 #fff0fc, inset -2px -2px 0 #b898cc",
               }}
             >
               <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
@@ -158,8 +158,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
               <div
                 className="border-2 border-[#7b2d8e] bg-[#fff0fc]"
                 style={{
-                  boxShadow:
-                    "inset 1px 1px 0 #b898cc, inset -1px -1px 0 #fff",
+                  boxShadow: "inset 1px 1px 0 #b898cc, inset -1px -1px 0 #fff",
                 }}
               >
                 <input
@@ -180,8 +179,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
               <div
                 className="border-2 border-[#7b2d8e] bg-[#fff0fc]"
                 style={{
-                  boxShadow:
-                    "inset 1px 1px 0 #b898cc, inset -1px -1px 0 #fff",
+                  boxShadow: "inset 1px 1px 0 #b898cc, inset -1px -1px 0 #fff",
                 }}
               >
                 <input
@@ -257,11 +255,45 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
       {/* OS branding */}
       <div className="mt-8 flex flex-col items-center gap-1">
         <div className="flex items-center gap-2">
-          <svg width="20" height="20" viewBox="0 0 14 14" fill="none">
-            <rect x="0" y="0" width="6" height="6" fill="#4a6fa5" />
-            <rect x="8" y="0" width="6" height="6" fill="#e8a4c8" />
-            <rect x="0" y="8" width="6" height="6" fill="#7b2d8e" />
-            <rect x="8" y="8" width="6" height="6" fill="#4a6fa5" />
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <ellipse cx="12" cy="5.5" rx="3" ry="4.5" fill="#ffc0d8" />
+            <ellipse cx="12" cy="18.5" rx="3" ry="4.5" fill="#ffc0d8" />
+            <ellipse cx="5.5" cy="12" rx="4.5" ry="3" fill="#e8a4c8" />
+            <ellipse cx="18.5" cy="12" rx="4.5" ry="3" fill="#e8a4c8" />
+            <ellipse
+              cx="7.3"
+              cy="7.3"
+              rx="3"
+              ry="4.5"
+              transform="rotate(-45 7.3 7.3)"
+              fill="#ff80b0"
+            />
+            <ellipse
+              cx="16.7"
+              cy="16.7"
+              rx="3"
+              ry="4.5"
+              transform="rotate(-45 16.7 16.7)"
+              fill="#ff80b0"
+            />
+            <ellipse
+              cx="16.7"
+              cy="7.3"
+              rx="3"
+              ry="4.5"
+              transform="rotate(45 16.7 7.3)"
+              fill="#d4b8e8"
+            />
+            <ellipse
+              cx="7.3"
+              cy="16.7"
+              rx="3"
+              ry="4.5"
+              transform="rotate(45 7.3 16.7)"
+              fill="#d4b8e8"
+            />
+            <circle cx="12" cy="12" r="3.5" fill="#e8c840" />
+            <circle cx="12" cy="12" r="2" fill="#f0d860" />
           </svg>
           <span className="text-lg font-bold text-[#e8d0f0] drop-shadow-[1px_1px_0px_#0a0020]">
             EmilyOS

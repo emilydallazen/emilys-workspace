@@ -16,7 +16,6 @@ const tabs = [
   { label: "Visão Geral", content: <TabDashboard /> },
   { label: "Movimentações", content: <TabFinanceiro /> },
   { label: "Cartão de Crédito", content: <TabCredito /> },
-  { label: "Tarefas", content: <TabTarefas /> },
 ];
 
 export default function Page() {
@@ -28,12 +27,12 @@ export default function Page() {
 
   return (
     <SoundProvider>
-      <PageContent />
+      <PageContent onLogout={() => setLoggedIn(false)} />
     </SoundProvider>
   );
 }
 
-function PageContent() {
+function PageContent({ onLogout }: { onLogout: () => void }) {
   // Financeiro window
   const [windowOpen, setWindowOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
@@ -152,6 +151,7 @@ function PageContent() {
 
       {/* Taskbar */}
       <Taskbar
+        onLogout={onLogout}
         windows={[
           ...(windowOpen
             ? [
