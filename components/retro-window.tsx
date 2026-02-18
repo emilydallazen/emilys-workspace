@@ -188,8 +188,24 @@ export function RetroWindow({
           >
             {isMaximized ? (
               <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-                <rect x="0" y="2" width="7" height="7" stroke="#1a0a2e" strokeWidth="1" fill="none" />
-                <rect x="3" y="0" width="7" height="7" stroke="#1a0a2e" strokeWidth="1" fill="#b898cc" />
+                <rect
+                  x="0"
+                  y="2"
+                  width="7"
+                  height="7"
+                  stroke="#1a0a2e"
+                  strokeWidth="1"
+                  fill="none"
+                />
+                <rect
+                  x="3"
+                  y="0"
+                  width="7"
+                  height="7"
+                  stroke="#1a0a2e"
+                  strokeWidth="1"
+                  fill="#b898cc"
+                />
               </svg>
             ) : (
               <span className="inline-block size-2.5 border border-[#1a0a2e]" />

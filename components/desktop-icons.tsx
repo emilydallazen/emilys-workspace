@@ -66,14 +66,33 @@ const icons = [
     label: "Minhas Tarefas",
     icon: (
       <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-        <rect x="5" y="3" width="22" height="26" rx="1" fill="#e8d0f0" stroke="#7b2d8e" strokeWidth="2" />
+        <rect
+          x="5"
+          y="3"
+          width="22"
+          height="26"
+          rx="1"
+          fill="#e8d0f0"
+          stroke="#7b2d8e"
+          strokeWidth="2"
+        />
         <rect x="9" y="7" width="14" height="2" fill="#7b2d8e" />
         <rect x="9" y="12" width="14" height="1.5" fill="#b898cc" />
         <rect x="9" y="16" width="14" height="1.5" fill="#b898cc" />
         <rect x="9" y="20" width="14" height="1.5" fill="#b898cc" />
         <rect x="9" y="24" width="10" height="1.5" fill="#b898cc" />
-        <path d="M6 11 L8 13 L11 9" stroke="#4a6fa5" strokeWidth="1.5" fill="none" />
-        <path d="M6 15 L8 17 L11 13" stroke="#4a6fa5" strokeWidth="1.5" fill="none" />
+        <path
+          d="M6 11 L8 13 L11 9"
+          stroke="#4a6fa5"
+          strokeWidth="1.5"
+          fill="none"
+        />
+        <path
+          d="M6 15 L8 17 L11 13"
+          stroke="#4a6fa5"
+          strokeWidth="1.5"
+          fill="none"
+        />
       </svg>
     ),
   },
@@ -140,7 +159,10 @@ const icons = [
   },
 ];
 
-export function DesktopIcons({ onOpenDocuments, onOpenTarefas }: DesktopIconsProps) {
+export function DesktopIcons({
+  onOpenDocuments,
+  onOpenTarefas,
+}: DesktopIconsProps) {
   const { playClick, playOpen } = useSoundContext();
 
   const handleClick = (id: string) => {
