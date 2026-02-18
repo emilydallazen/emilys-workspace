@@ -194,6 +194,76 @@ export function useSound() {
     }
   }, [getCtx]);
 
+  /** Jingle de boot do OS — melodia estilo Win95, harmônica e longa */
+  const playBootJingle = useCallback(() => {
+    try {
+      const ctx = getCtx();
+
+      // Melodia principal — notas suaves com reverb simulado
+      const melody: [number, number, number][] = [
+        // [frequência, início, duração]
+        [392, 0, 0.45],     // G4
+        [523, 0.35, 0.45],  // C5
+        [659, 0.7, 0.4],    // E5
+        [784, 1.0, 0.5],    // G5
+        [659, 1.4, 0.3],    // E5
+        [784, 1.65, 0.6],   // G5
+        [1047, 1.95, 0.9],  // C6 — nota final longa
+      ];
+
+      melody.forEach(([freq, start, dur]) => {
+        // Onda principal — triângulo (suave)
+        const osc1 = ctx.createOscillator();
+        const g1 = ctx.createGain();
+        osc1.type = "triangle";
+        const t = ctx.currentTime + start;
+        osc1.frequency.setValueAtTime(freq, t);
+        g1.gain.setValueAtTime(0.001, ctx.currentTime);
+        g1.gain.linearRampToValueAtTime(0.12, t + 0.04);
+        g1.gain.setValueAtTime(0.12, t + dur * 0.6);
+        g1.gain.exponentialRampToValueAtTime(0.001, t + dur);
+        osc1.connect(g1);
+        g1.connect(ctx.destination);
+        osc1.start(t);
+        osc1.stop(t + dur + 0.05);
+
+        // Harmônico sutil — sine uma oitava acima
+        const osc2 = ctx.createOscillator();
+        const g2 = ctx.createGain();
+        osc2.type = "sine";
+        osc2.frequency.setValueAtTime(freq * 2, t);
+        g2.gain.setValueAtTime(0.001, ctx.currentTime);
+        g2.gain.linearRampToValueAtTime(0.04, t + 0.04);
+        g2.gain.setValueAtTime(0.04, t + dur * 0.5);
+        g2.gain.exponentialRampToValueAtTime(0.001, t + dur);
+        osc2.connect(g2);
+        g2.connect(ctx.destination);
+        osc2.start(t);
+        osc2.stop(t + dur + 0.05);
+      });
+
+      // Pad de fundo — acorde sustentado suave
+      const padFreqs = [262, 330, 392]; // C4 E4 G4
+      padFreqs.forEach((freq) => {
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = "sine";
+        const t = ctx.currentTime;
+        osc.frequency.setValueAtTime(freq, t);
+        g.gain.setValueAtTime(0.001, t);
+        g.gain.linearRampToValueAtTime(0.03, t + 0.3);
+        g.gain.setValueAtTime(0.03, t + 2.0);
+        g.gain.exponentialRampToValueAtTime(0.001, t + 3.0);
+        osc.connect(g);
+        g.connect(ctx.destination);
+        osc.start(t);
+        osc.stop(t + 3.1);
+      });
+    } catch {
+      // silently fail
+    }
+  }, [getCtx]);
+
   return {
     playClick,
     playTab,
@@ -203,5 +273,6 @@ export function useSound() {
     playError,
     playHover,
     playStartup,
+    playBootJingle,
   };
 }

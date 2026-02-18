@@ -112,9 +112,9 @@ export function TabTarefas() {
   const total = tarefas.length;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex h-full min-h-0 flex-col gap-4">
       {/* Add task area */}
-      <div className="flex gap-2">
+      <div className="flex shrink-0 gap-2">
         <input
           type="text"
           value={novaTarefa}
@@ -139,7 +139,7 @@ export function TabTarefas() {
 
       {/* Progress */}
       <div
-        className="border-2 border-[#7b2d8e] bg-[#d4b8e8] p-2"
+        className="shrink-0 border-2 border-[#7b2d8e] bg-[#d4b8e8] p-2"
         style={{
           boxShadow: "inset 1px 1px 0 #e8d0f0, inset -1px -1px 0 #7b2d8e",
         }}
@@ -168,7 +168,8 @@ export function TabTarefas() {
       </div>
 
       {/* Task list */}
-      <div className="flex flex-col">
+      <div className="min-h-0 flex-1 overflow-y-auto">
+        <div className="flex flex-col">
         {tarefas.map((t) => {
           const cor = prioridadeCores[t.prioridade];
           return (
@@ -218,11 +219,12 @@ export function TabTarefas() {
             </div>
           );
         })}
+        </div>
       </div>
 
       {/* Status bar */}
       <div
-        className="flex items-center justify-between border-2 border-[#7b2d8e] bg-[#d4b8e8] px-3 py-1 text-sm text-[#3d1a5c]"
+        className="shrink-0 flex items-center justify-between border-2 border-[#7b2d8e] bg-[#d4b8e8] px-3 py-1 text-sm text-[#3d1a5c]"
         style={{
           boxShadow: "inset 1px 1px 0 #e8d0f0, inset -1px -1px 0 #7b2d8e",
         }}

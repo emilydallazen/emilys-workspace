@@ -26,14 +26,14 @@ export function RetroTabs({ tabs }: RetroTabsProps) {
   return (
     <div className="flex h-full flex-col">
       {/* Tab headers */}
-      <div className="flex items-end gap-0 pl-2 pt-2">
+      <div className="relative z-0 flex items-end gap-0 pl-2 pt-2">
         {tabs.map((tab, index) => (
           <button
             key={tab.label}
             onClick={() => handleTabClick(index)}
             className={`relative px-4 py-1.5 text-base transition-none ${
               activeTab === index
-                ? "z-10 -mb-px border-2 border-b-0 border-[#7b2d8e] bg-[#fff0fc] text-[#1a0a2e]"
+                ? "z-1 -mb-px border-2 border-b-0 border-[#7b2d8e] bg-[#fff0fc] text-[#1a0a2e]"
                 : "border-2 border-b-0 border-[#b898cc] bg-[#b898cc] text-[#3d1a5c] hover:bg-[#d4b8e8]"
             }`}
             style={

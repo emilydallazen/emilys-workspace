@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useSound } from "@/hooks/use-sound";
 
 interface LoginScreenProps {
   onLogin: () => void;
@@ -12,6 +13,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
   const [password, setPassword] = useState("");
   const [bootLines, setBootLines] = useState<string[]>([]);
   const [showCursor, setShowCursor] = useState(true);
+  const { playBootJingle, playConfirm } = useSound();
 
   // Cursor blink
   useEffect(() => {
@@ -48,6 +50,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
         i++;
       } else {
         clearInterval(interval);
+        playBootJingle();
         setTimeout(() => setPhase("login"), 3600);
       }
     }, 120);
@@ -60,6 +63,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
       e.preventDefault();
       if (!username.trim()) return;
       setPhase("logging-in");
+      playConfirm();
       setTimeout(() => {
         onLogin();
       }, 1200);
